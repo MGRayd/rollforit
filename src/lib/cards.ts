@@ -10,418 +10,92 @@ export function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-// Define the structure for dice combinations
 interface DiceCombo {
   name: string;
   description: string;
   points: number;
-  diceNeeded: number[];  // Array of dice values (1-6)
-  minDiceRequired: number; // Minimum number of dice to fulfill this combo
+  diceNeeded: number[];
+  minDiceRequired: number;
   aiHint: string;
 }
 
+// A diverse set of card combinations inspired by Roll For It!
 const diceComboCards: DiceCombo[] = [
-  {
-    name: "Easy Start",
-    description: "Find dice showing 1, 2, and 3",
-    points: 2,
-    diceNeeded: [1, 2, 3], // Specific dice required
- minDiceRequired: 3,
-    aiHint: "sequence 1-2-3"
-  },
-  {
-    name: "Middle Ground",
-    description: "Find dice showing 2, 3, and 4",
-    points: 2,
-    diceNeeded: [2, 3, 4], // Specific dice required
- minDiceRequired: 3,
-    aiHint: "sequence 2-3-4"
-  },
-  {
-    name: "High Roll",
- description: "Find dice showing 4, 5, and 6",
-    points: 2,
-    diceNeeded: [4, 5, 6], // Specific dice required
- minDiceRequired: 3,
-    aiHint: "sequence 4-5-6"
-  },
-  {
-    name: "Pair of 1s",
-    description: "Find two dice showing 1",
-    points: 2,
-    diceNeeded: [1, 1],
- minDiceRequired: 2,
- aiHint: "pair of ones"
-  },
-  {
-    name: "Pair of 2s",
-    description: "Find two dice showing 2",
-    points: 2,
-    diceNeeded: [2, 2],
- minDiceRequired: 2,
- aiHint: "pair of twos"
-  },
-  {
-    name: "Pair of 3s",
-    description: "Find two dice showing 3",
-    points: 2,
-    diceNeeded: [3, 3],
- minDiceRequired: 2,
- aiHint: "pair of threes"
-  },
-  {
-    name: "Pair of 4s",
-    description: "Find two dice showing 4",
-    points: 2,
-    diceNeeded: [4, 4],
- minDiceRequired: 2,
- aiHint: "pair of fours"
-  },
-  {
-    name: "Pair of 5s",
-    description: "Find two dice showing 5",
-    points: 2,
-    diceNeeded: [5, 5],
- minDiceRequired: 2,
- aiHint: "pair of fives"
-  },
-  {
-    name: "Pair of 6s",
-    description: "Find two dice showing 6",
-    points: 2,
-    diceNeeded: [6, 6],
- minDiceRequired: 2,
- aiHint: "pair of sixes"
-  },
-  {
-    name: "Two Pairs (1s and 2s)",
-    description: "Find two 1s and two 2s",
-    points: 5,
-    diceNeeded: [1, 1, 2, 2],
- minDiceRequired: 4,
- aiHint: "two pairs ones and twos"
-  },
-  {
-    name: "Two Pairs (3s and 4s)",
-    description: "Find two 3s and two 4s",
-    points: 5,
-    diceNeeded: [3, 3, 4, 4],
- minDiceRequired: 4,
- aiHint: "two pairs threes and fours"
-  },
-  {
-    name: "Two Pairs (5s and 6s)",
-    description: "Find two 5s and two 6s",
-    points: 5,
-    diceNeeded: [5, 5, 6, 6],
- minDiceRequired: 4,
- aiHint: "two pairs fives and sixes"
-  },
-  {
-    name: "Two Pairs (1s and 3s)",
-    description: "Find two 1s and two 3s",
-    points: 5,
-    diceNeeded: [1, 1, 3, 3],
- minDiceRequired: 4,
-    aiHint: "two pairs"
-  },
-  {
-    name: "Two Pairs (2s and 4s)",
-    description: "Find two 2s and two 4s",
-    points: 5,
-    diceNeeded: [2, 2, 4, 4],
- minDiceRequired: 4,
- aiHint: "two pairs"
-  },
-  {
-    name: "Two Pairs (3s and 5s)",
-    description: "Find two 3s and two 5s",
-    points: 5,
-    diceNeeded: [3, 3, 5, 5],
- minDiceRequired: 4,
- aiHint: "two pairs"
-  },
-  {
-    name: "Three 1s",
-    description: "Find three dice showing a 1",
-    points: 10,
-    diceNeeded: [1, 1, 1],
- minDiceRequired: 3,
-    aiHint: "three ones"
-  },
-  {
-    name: "Three 2s",
-    description: "Find three dice showing a 2",
-    points: 2,
-    diceNeeded: [2, 2, 2],
-    minDiceRequired: 3,
-    aiHint: "three twos"
-  },
-  {
-    name: "Three 3s",
-    description: "Find three dice showing a 3",
-    points: 5,
-    diceNeeded: [3, 3, 3],
-    minDiceRequired: 3,
-    aiHint: "three threes"
-  },
-  {
-    name: "Three 4s",
-    description: "Find three dice showing a 4",
-    points: 5,
-    diceNeeded: [4, 4, 4],
-    minDiceRequired: 3,
-    aiHint: "three fours"
-  },
-  {
-    name: "Three 5s",
-    description: "Find three dice showing a 5",
-    points: 5,
-    diceNeeded: [5, 5, 5],
-    minDiceRequired: 3,
-    aiHint: "three fives"
-  },
-  {
-    name: "Three 6s",
-    description: "Find three dice showing a 6",
-    points: 10,
-    diceNeeded: [6, 6, 6],
-    minDiceRequired: 3,
-    aiHint: "three sixes"
-  },
-  {
-    name: "Four 1s",
-    description: "Find four dice showing a 1",
-    points: 15,
-    diceNeeded: [1, 1, 1, 1],
-    minDiceRequired: 4,
-    aiHint: "four ones"
-  },
-  {
-    name: "Four 2s",
-    description: "Find four dice showing a 2",
-    points: 5,
-    diceNeeded: [2, 2, 2, 2],
-    minDiceRequired: 4,
-    aiHint: "four twos"
-  },
-  {
-    name: "Four 3s",
-    description: "Find four dice showing a 3",
-    points: 10,
-    diceNeeded: [3, 3, 3, 3],
-    minDiceRequired: 4,
-    aiHint: "four threes"
-  },
-  {
-    name: "Four 4s",
-    description: "Find four dice showing a 4",
-    points: 5,
-    diceNeeded: [4, 4, 4, 4],
-    minDiceRequired: 4,
-    aiHint: "four fours"
-  },
-  {
-    name: "Four 5s",
-    description: "Find four dice showing a 5",
-    points: 10,
-    diceNeeded: [5, 5, 5, 5],
-    minDiceRequired: 4,
-    aiHint: "four fives"
-  },
-  {
-    name: "Four 6s",
-    description: "Find four dice showing a 6",
-    points: 10,
-    diceNeeded: [6, 6, 6, 6],
-    minDiceRequired: 4,
-    aiHint: "four sixes"
-  },
-  {
-    name: "Five 1s",
-    description: "Find five dice showing a 1",
-    points: 15,
-    diceNeeded: [1, 1, 1, 1, 1],
-    minDiceRequired: 5,
-    aiHint: "five ones"
-  },
-  {
-    name: "Five 2s",
-    description: "Find five dice showing a 2",
-    points: 15,
-    diceNeeded: [2, 2, 2, 2, 2],
-    minDiceRequired: 5,
-    aiHint: "five twos"
-  },
-  {
-    name: "Five 3s",
-    description: "Find five dice showing a 3",
-    points: 15,
-    diceNeeded: [3, 3, 3, 3, 3],
-    minDiceRequired: 5,
-    aiHint: "five threes"
-  },
-  {
-    name: "Five 4s",
-    description: "Find five dice showing a 4",
-    points: 15,
-    diceNeeded: [4, 4, 4, 4, 4],
-    minDiceRequired: 5,
-    aiHint: "five fours"
-  },
-  {
-    name: "Five 5s",
-    description: "Find five dice showing a 5",
-    points: 15,
-    diceNeeded: [5, 5, 5, 5, 5],
-    minDiceRequired: 5,
-    aiHint: "five fives"
-  },
-  {
-    name: "Five 6s",
-    description: "Find five dice showing a 6",
-    points: 15,
-    diceNeeded: [6, 6, 6, 6, 6],
-    minDiceRequired: 5,
-    aiHint: "five sixes"
-  },
-  {
-    name: "Three Pairs (1s, 2s, 3s)",
-    description: "Find two 1s, two 2s, and two 3s",
-    points: 15,
-    diceNeeded: [1, 1, 2, 2, 3, 3],
-    minDiceRequired: 6,
-    aiHint: "three pairs ones twos threes"
-  },
-  {
-    name: "Full House",
-    description: "Find three of one number and two of another",
-    points: 10,
-    diceNeeded: [1, 1, 1, 2, 2],
-    minDiceRequired: 5,
-    aiHint: "full house"
-  },
-  {
-    name: "Full House (Three 1s, Two 2s)",
-    description: "Find three 1s and two 2s",
-    points: 10,
-    diceNeeded: [1, 1, 1, 2, 2],
-    minDiceRequired: 5,
-    aiHint: "full house three ones two twos"
-  },
-  {
-    name: "Full House (Three 6s, Two 5s)",
-    description: "Find three 6s and two 5s",
-    points: 10,
-    diceNeeded: [6, 6, 6, 5, 5],
-    minDiceRequired: 5,
-    aiHint: "full house three sixes two fives"
-  },
-  {
-    name: "Straight (1 to 5)",
-    description: "Find dice showing 1, 2, 3, 4, and 5",
-    points: 10,
-    diceNeeded: [1, 2, 3, 4, 5],
-    minDiceRequired: 5,
-    aiHint: "straight 1-5"
-  },
-  {
-    name: "Straight (2 to 6)",
-    description: "Find dice showing 2, 3, 4, 5, and 6",
-    points: 15,
-    diceNeeded: [2, 3, 4, 5, 6],
-    minDiceRequired: 5,
-    aiHint: "straight 2-6"
-  }
+  { name: "Easy Start", description: "Find dice showing 1, 2, and 3", points: 2, diceNeeded: [1, 2, 3], minDiceRequired: 3, aiHint: "sequence 1-2-3" },
+  { name: "Middle Ground", description: "Find dice showing 2, 3, and 4", points: 2, diceNeeded: [2, 3, 4], minDiceRequired: 3, aiHint: "sequence 2-3-4" },
+  { name: "High Roll", description: "Find dice showing 4, 5, and 6", points: 2, diceNeeded: [4, 5, 6], minDiceRequired: 3, aiHint: "sequence 4-5-6" },
+  { name: "Even Roll", description: "Find dice showing 2, 4, and 6", points: 3, diceNeeded: [2, 4, 6], minDiceRequired: 3, aiHint: "evens" },
+  { name: "Odd Roll", description: "Find dice showing 1, 3, and 5", points: 3, diceNeeded: [1, 3, 5], minDiceRequired: 3, aiHint: "odds" },
+  { name: "Mixed Triplet", description: "Two 1s and one 2", points: 3, diceNeeded: [1, 1, 2], minDiceRequired: 3, aiHint: "pair and one" },
+  { name: "Triplet Split", description: "Two 2s and one 5", points: 4, diceNeeded: [2, 2, 5], minDiceRequired: 3, aiHint: "pair plus odd" },
+  { name: "Low Triplet", description: "Find three 2s", points: 4, diceNeeded: [2, 2, 2], minDiceRequired: 3, aiHint: "triplet" },
+  { name: "High Triplet", description: "Find three 5s", points: 5, diceNeeded: [5, 5, 5], minDiceRequired: 3, aiHint: "triplet" },
+  { name: "Asymmetric Quad", description: "Two 4s, one 2, and one 5", points: 6, diceNeeded: [4, 4, 2, 5], minDiceRequired: 4, aiHint: "quad variant" },
+  { name: "Quad Mix", description: "Three 4s and one 1", points: 6, diceNeeded: [4, 4, 4, 1], minDiceRequired: 4, aiHint: "triplet plus odd" },
+  { name: "Lucky Fours", description: "Find four 4s", points: 8, diceNeeded: [4, 4, 4, 4], minDiceRequired: 4, aiHint: "quad" },
+  { name: "High Pair", description: "Two 6s and one 5", points: 4, diceNeeded: [6, 6, 5], minDiceRequired: 3, aiHint: "pair plus one" },
+  { name: "Off Balance", description: "One 1, one 2, and one 4", points: 3, diceNeeded: [1, 2, 4], minDiceRequired: 3, aiHint: "non-sequential" },
+  { name: "Climb Up", description: "Find dice showing 2, 3, and 5", points: 3, diceNeeded: [2, 3, 5], minDiceRequired: 3, aiHint: "mixed climb" },
+  { name: "Center Trio", description: "Find dice showing 3, 4, and 5", points: 4, diceNeeded: [3, 4, 5], minDiceRequired: 3, aiHint: "mid trio" },
+  { name: "Wild Mix", description: "Find dice 1, 2, 3 and one wildcard", points: 5, diceNeeded: [1, 2, 3, -1], minDiceRequired: 4, aiHint: "sequence plus wildcard" },
+  { name: "Full House", description: "Three of one number and two of another", points: 10, diceNeeded: [2, 2, 2, 5, 5], minDiceRequired: 5, aiHint: "full house" },
+  { name: "Power Combo", description: "Three 3s and two 5s", points: 10, diceNeeded: [3, 3, 3, 5, 5], minDiceRequired: 5, aiHint: "full house variant" },
+  { name: "Full House Variant", description: "Three 6s and two 1s", points: 12, diceNeeded: [6, 6, 6, 1, 1], minDiceRequired: 5, aiHint: "full house alt" },
+  { name: "Three Pairs", description: "Two 1s, two 3s, and two 5s", points: 15, diceNeeded: [1, 1, 3, 3, 5, 5], minDiceRequired: 6, aiHint: "three pairs" },
+  { name: "Two Triplets", description: "Three 2s and three 4s", points: 15, diceNeeded: [2, 2, 2, 4, 4, 4], minDiceRequired: 6, aiHint: "two triplets" },
+  { name: "Almost Straight", description: "Find 1, 2, 3, 5, and 6", points: 9, diceNeeded: [1, 2, 3, 5, 6], minDiceRequired: 5, aiHint: "almost straight" },
+  { name: "Almost Even", description: "Two 2s, two 4s, and one 6", points: 12, diceNeeded: [2, 2, 4, 4, 6], minDiceRequired: 5, aiHint: "even variant" },
+  { name: "Almost Odd", description: "Two 1s, two 3s, and one 5", points: 12, diceNeeded: [1, 1, 3, 3, 5], minDiceRequired: 5, aiHint: "odd variant" },
+  { name: "Full Straight", description: "Find dice showing 1 through 6", points: 20, diceNeeded: [1, 2, 3, 4, 5, 6], minDiceRequired: 6, aiHint: "full straight" }
+];
+
+// Distribution mapping each combo to how many cards should appear, summing to exactly 40
+const cardDistribution: { name: string; count: number }[] = [
+  { name: "Easy Start", count: 3 },       // 3
+  { name: "Middle Ground", count: 3 },    // 6
+  { name: "High Roll", count: 3 },        // 9
+  { name: "Even Roll", count: 2 },        // 11
+  { name: "Odd Roll", count: 2 },         // 13
+  { name: "Mixed Triplet", count: 2 },    // 15
+  { name: "Triplet Split", count: 1 },    // 16
+  { name: "Low Triplet", count: 1 },      // 17
+  { name: "High Triplet", count: 1 },     // 18
+  { name: "Asymmetric Quad", count: 1 },  // 19
+  { name: "Quad Mix", count: 1 },         // 20
+  { name: "Lucky Fours", count: 1 },      // 21
+  { name: "High Pair", count: 1 },        // 22
+  { name: "Off Balance", count: 1 },      // 23
+  { name: "Climb Up", count: 1 },         // 24
+  { name: "Center Trio", count: 1 },      // 25
+  { name: "Wild Mix", count: 2 },         // 27
+  { name: "Full House", count: 2 },       // 29
+  { name: "Power Combo", count: 1 },      // 30
+  { name: "Full House Variant", count: 1 },// 31
+  { name: "Three Pairs", count: 1 },      // 32
+  { name: "Two Triplets", count: 1 },     // 33
+  { name: "Almost Straight", count: 2 },  // 35
+  { name: "Almost Even", count: 2 },      // 37
+  { name: "Almost Odd", count: 2 },       // 39
+  { name: "Full Straight", count: 1 }     // 40
 ];
 
 export const generateDeck = (): Card[] => {
-  // Create 40 cards by duplicating the combinations.
-  // We'll duplicate simpler combos more often.
   const deck: Card[] = [];
 
-  // Define how many times to duplicate each card type.
-  // Adjust these numbers to get a total of 40 cards and control difficulty distribution.
-  const cardDistribution = [
- { name: "Easy Start", count: 3 },
- { name: "Middle Ground", count: 3 },
- { name: "High Roll", count: 3 },
- { name: "Pair of 1s", count: 2 },
- { name: "Pair of 2s", count: 2 },
- { name: "Pair of 3s", count: 2 },
- { name: "Pair of 4s", count: 2 },
- { name: "Pair of 5s", count: 2 },
- { name: "Pair of 6s", count: 2 },
- { name: "Two Pairs (1s and 2s)", count: 2 },
- { name: "Two Pairs (3s and 4s)", count: 2 },
- { name: "Two Pairs (5s and 6s)", count: 2 },
- { name: "Two Pairs (1s and 3s)", count: 1 },
- { name: "Two Pairs (2s and 4s)", count: 1 },
- { name: "Two Pairs (3s and 5s)", count: 1 },
- { name: "Three 1s", count: 1 },
- { name: "Three 2s", count: 1 },
- { name: "Three 3s", count: 1 },
- { name: "Three 4s", count: 1 },
- { name: "Three 5s", count: 1 },
- { name: "Three 6s", count: 1 },
- { name: "Four 1s", count: 1 },
- { name: "Four 2s", count: 1 },
- { name: "Four 3s", count: 1 },
- { name: "Four 4s", count: 1 },
- { name: "Four 5s", count: 1 },
- { name: "Four 6s", count: 1 },
- { name: "Five 1s", count: 1 },
- { name: "Five 2s", count: 1 },
- { name: "Five 3s", count: 1 },
- { name: "Five 4s", count: 1 },
- { name: "Five 5s", count: 1 },
- { name: "Five 6s", count: 1 },
- { name: "Three Pairs (1s, 2s, 3s)", count: 1 },
- { name: "Full House (Three 1s, Two 2s)", count: 1 },
- { name: "Full House (Three 6s, Two 5s)", count: 1 },
- { name: "Straight (1 to 5)", count: 2 },
- { name: "Straight (2 to 6)", count: 1 },
- ];
-
   cardDistribution.forEach(({ name, count }) => {
-    const combo = diceComboCards.find(card => card.name === name);
-    if (combo) {
-      for (let i = 0; i < count; i++) {
-        deck.push({
-          id: `card-${combo.name}-${i + 1}`.toLowerCase().replace(/\s+/g, '-'),
-          name: combo.name,
-          points: combo.points,
-          aiHint: combo.aiHint,
-          diceValues: combo.diceNeeded,
-          description: combo.description
-        });
-      }
+    const combo = diceComboCards.find(c => c.name === name);
+    if (!combo) return;
+    for (let i = 0; i < count; i++) {
+      deck.push({
+        id: `card-${combo.name}-${i + 1}`.toLowerCase().replace(/\s+/g, '-'),
+        name: combo.name,
+        points: combo.points,
+        aiHint: combo.aiHint,
+        diceValues: combo.diceNeeded,
+        description: combo.description
+      });
     }
   });
-  
-  // Ensure the deck size is exactly 40 by trimming or adding if necessary
-  // (This might require more careful adjustment of cardDistribution counts)
-  while (deck.length > 40) {
-    deck.pop(); // Remove excess cards from the end
-  }
-  while (deck.length < 40) {
-    // Add a default easy card if we are short
-    const easyCard = diceComboCards.find(card => card.name === "Easy Start");
-    if (easyCard) {
-      deck.push({
-        id: `card-${easyCard.name}-${deck.length + 1}`.toLowerCase().replace(/\s+/g, '-'),
-        name: easyCard.name,
-        points: easyCard.points,
-        aiHint: easyCard.aiHint,
-        diceValues: easyCard.diceNeeded,
-        description: easyCard.description
-      });
-    } else {
-      // As a fallback, duplicate the last added card if no Easy Start found
-      deck.push({...deck[deck.length - 1]});
-    }
-  }
 
-  // Shuffle the final deck
   return shuffleArray(deck);
 };
