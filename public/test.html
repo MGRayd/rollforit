@@ -3,6 +3,11 @@
 <head>
   <title>Dice Test</title>
   <style>
+    .dice-container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
     .dice {
       width: 40px;
       height: 40px;
@@ -10,6 +15,16 @@
       padding: 5px;
       background: white;
       border: 1px solid #ccc;
+    }
+
+    /* For 4 dice, two per line */
+    .dice-container:has(.dice:nth-last-child(4):nth-child(1)) .dice {
+      flex-basis: calc(50% - 30px); /* 50% width minus margin/padding */
+    }
+
+    /* For 6 dice, three per line */
+    .dice-container:has(.dice:nth-last-child(6):nth-child(1)) .dice {
+      flex-basis: calc(33.33% - 30px); /* 33.33% width minus margin/padding */
     }
   </style>
 </head>
